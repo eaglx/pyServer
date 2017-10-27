@@ -113,7 +113,7 @@ class Handler(threading.Thread):
 		self.s.close()		
 		
 def main():		
-	print "CobraServer ver 0.01a"		
+	print "pyServer ver 0.01a"		
 	server = gsocket(socket.AF_INET, socket.SOCK_STREAM)	#TCP		
 	# Binding socket "address already in use" - Linux kernel sec matter		
 	server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 		
