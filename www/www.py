@@ -1,13 +1,14 @@
 #!/usr/bin/python2		
 		
 import sys		
-import socket		
+import socket
+import subprocess		
 import telnetlib		
 import os		
 import threading		
 from struct import pack, unpack		
 		
-def recvuntil(sock, txt):	# Read data from socket until string		
+def recvuntil(sock, txt):	# Read data from socket until special string txt		
 	d = ""		
 	while d.find(txt) == -1:		
 		try:		
@@ -25,7 +26,7 @@ def recvuntil(sock, txt):	# Read data from socket until string
 		d += dnow		
 	return d		
 		
-def recvall(sock, n):	# Read data from socket until n-bytes		
+def recvall(sock, n):	# Read data from socket and read only n-bytes		
 	d = ""		
 	while len(d) != n:		
 		try:		
@@ -85,7 +86,12 @@ class Handler(threading.Thread):
 				raise Exception("Exit!!!")		
 					
 			if path == "/":		
-				path = "/index.html"		
+				path = "/index.html"
+			elif path == "/hmpa_data":
+			    path = "/second.html"
+			    p = subprocess.Popen('exec/test.py')    # Only linux
+			    p.wait()
+			    		
 					
 			final_path = "public_html" + path		
 			with open(final_path, "rb") as f:		
