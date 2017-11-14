@@ -1,7 +1,6 @@
 #!/usr/bin/python2
-
+import json 
 import psycopg2
-
 from datetime import datetime
 
 try:
@@ -9,22 +8,19 @@ try:
     print "Opened database successfully"
 except psycopg2.Error as e:
     print e
-try:
-    quer = "SELECT godzina, COUNT(*) FROM polaczenia GROUP BY godzina ORDER BY godzina;"
-    cur = conn.cursor()
-    cur.execute(quer)
-	
-	if(cur.rowcount == 0):	# CHECK IF WORK
-		print "No data!!!"
-	else:	
-		rows = cur.fetchall()
-		#tab = [str(rows[0])[15:17]]
-		#del rows[0]
-		#print tab
-		for row in rows:
-			print row
-			#print(str(row)[15:17])
 
-except psycopg2.Error as e:
-    print(e)
-    print "SELECT error"
+with open('PATH_PATH') as jsdata:
+    data = json.load(jsdata)
+    for mac in data:
+        try:
+            mac_inf = mac['mac']
+            tim_e = int(str(datetime.now().time())[0:2])
+            cur = conn.cursor()
+            query = "insert into polaczenia (mac_adr, godzina) VALUES (%s, %s);"
+            data = (mac_inf, tim_e)
+            cur.execute(query, data)
+            conn.commit()
+            print "Add ", mac_inf
+        except psycopg2.Error as e:
+            print(e)
+            print "Cannot insert into polaczenia"
